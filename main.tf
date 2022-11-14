@@ -27,7 +27,7 @@ file_system_config {
 
 environment {
     variables = {
-      EFS_MOUNT_POINT = local.lambda_file_system_local_mount_path
+      EFS_MOUNT_POINT = "/mnt/efs"
     }
 }
 
