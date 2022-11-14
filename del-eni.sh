@@ -30,7 +30,7 @@ for item in ${enis}; do
 done
 
 # cleanup any "available" eni's in the target SG"
-sleep 10
+sleep 100
 enis=$(aws ec2 describe-network-interfaces --filters Name=group-id,Values=${TARGET_SG_ID} Name=status,Values='available' --query 'NetworkInterfaces[*].NetworkInterfaceId' --output text)
 for item in ${enis}; do
   aws ec2 delete-network-interface --network-interface-id $item

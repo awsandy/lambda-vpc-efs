@@ -1,14 +1,39 @@
-variable "file_system_id" {
-  type    = string
-  default = "fs-552b7ea4"
+#variable "file_system_id" {
+#  type    = string
+#  default = "fs-552b7ea4"
+#}
+
+#data "aws_efs_file_system" "foo" {
+#  file_system_id = sagemaker.foo.
+#}
+
+
+
+resource "aws_efs_file_system" "foo" {
+  creation_token = "my-product"
+
+  lifecycle_policy {
+    transition_to_ia = "AFTER_30_DAYS"
+  }
+
+  tags = {
+    Name = "Lambda-efs"
+  }
+
+
 }
 
-data "aws_efs_file_system" "foo" {
-  file_system_id = var.file_system_id
+resource "aws_efs_mount_target" "alpha" {
+  file_system_id = aws_efs_file_system.foo.id
+  subnet_id      = aws_subnet.private.id
+  security_groups = [aws_security_group.test_sg.id]
 }
+
+
 
 resource "aws_efs_access_point" "foo" {
-  file_system_id = data.aws_efs_file_system.foo.id
+#  file_system_id = data.aws_efs_file_system.foo.id
+  file_system_id = aws_efs_file_system.foo.id
     posix_user {
     gid = 0 
     uid = 0
